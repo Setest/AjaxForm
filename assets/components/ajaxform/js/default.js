@@ -2,15 +2,22 @@ var AjaxForm = {
 
 	initialize: function() {
 		if(!jQuery().ajaxForm) {
-			document.write('<script src="'+afConfig.assetsUrl+'js/lib/jquery.form.min.js"><\/script>');
+			// document.write('<script src="'+afConfig.assetsUrl+'js/lib/jquery.form.min.js"><\/script>');
+			$.getScript(afConfig.assetsUrl+'js/lib/jquery.form.min.js', function(){
+			  // alert('script loaded');
+			});
 		}
 		if(!jQuery().jGrowl) {
-			document.write('<script src="'+afConfig.assetsUrl+'js/lib/jquery.jgrowl.min.js"><\/script>');
+			// document.write('<script src="'+afConfig.assetsUrl+'js/lib/jquery.jgrowl.min.js"><\/script>');
+			$.getScript(afConfig.assetsUrl+'js/lib/jquery.jgrowl.min.js', function(){
+			  // alert('script loaded');
+				$.jGrowl.defaults.closerTemplate = '<div>[ '+afConfig.closeMessage+' ]</div>';
+			});
 		}
 
-		$(document).ready(function() {
-			$.jGrowl.defaults.closerTemplate = '<div>[ '+afConfig.closeMessage+' ]</div>';
-		});
+		// $(document).ready(function() {
+			// $.jGrowl.defaults.closerTemplate = '<div>[ '+afConfig.closeMessage+' ]</div>';
+		// });
 
 		$(document).on('submit', afConfig.formSelector, function(e) {
 			$(this).ajaxSubmit({

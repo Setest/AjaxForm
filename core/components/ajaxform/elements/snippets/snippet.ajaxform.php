@@ -58,5 +58,9 @@ $action = !empty($_REQUEST['af_action'])
 
 $AjaxForm->process($action, $_REQUEST);
 
+if ($AjaxForm->dynStart){
+	$content.=$AjaxForm->dynContent;
+}
+
 // Return chunk
 return $content;

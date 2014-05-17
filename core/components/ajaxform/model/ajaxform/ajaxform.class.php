@@ -7,7 +7,10 @@ class AjaxForm {
 	public $config;
 	/** @var array $initialized */
 	public $initialized = array();
-
+	/** @var string [содержит css и script для возврата в случае если сниппет запускается из ajax ] */
+	public $dynContent = "";
+	/** @var boolean [при true подгружает js и css в чанк] */
+	public $dynStart = false;
 
 	/**
 	 * @param modX $modx
@@ -19,6 +22,11 @@ class AjaxForm {
 		$corePath = $this->modx->getOption('ajaxform_core_path', $config, $this->modx->getOption('core_path') . 'components/ajaxform/');
 		$assetsPath = $this->modx->getOption('ajaxform_assets_path', $config, $this->modx->getOption('assets_path') . 'components/ajaxform/');
 		$assetsUrl = $this->modx->getOption('ajaxform_assets_url', $config, $this->modx->getOption('assets_url') . 'components/ajaxform/');
+
+		// SETEST
+		// это свойство для подключения стилей и скриптов не во внешний output а в чанк
+		// на случай если сайт полностью на ajax
+		$this->dynStart = $modx->getOption('dynStart', $config, false);
 
 		$this->modx->lexicon->load('ajaxform:default');
 
@@ -48,6 +56,7 @@ class AjaxForm {
 	 * @return boolean
 	 */
 	public function initialize($ctx = 'web', $scriptProperties = array()) {
+
 		$this->config = array_merge($this->config, $scriptProperties);
 		$this->config['ctx'] = $ctx;
 		if (!empty($this->initialized[$ctx])) {
@@ -60,6 +69,7 @@ class AjaxForm {
 					if ($css = trim($this->config['frontend_css'])) {
 						if (preg_match('/\.css/i', $css)) {
 							$this->modx->regClientCSS(str_replace('[[+assetsUrl]]', $this->config['assetsUrl'], $css));
+							$this->dynContent.=($this->dynStart)?"<link rel='stylesheet' href='".str_replace('[[+assetsUrl]]', $this->config['assetsUrl'], $css)."'>":"";
 						}
 					}
 
@@ -73,21 +83,25 @@ class AjaxForm {
 					');
 					if (file_put_contents($this->config['assetsPath'] . 'js/config.js', $config_js)) {
 						$this->modx->regClientStartupScript($this->config['assetsUrl'] . 'js/config.js');
+						$this->dynContent.=($this->dynStart)?"<script type=\"text/javascript\" src='".$this->config['assetsUrl'] . 'js/config.js'."'></script>":"";
 					}
 					else {
 						$this->modx->regClientStartupScript("<script type=\"text/javascript\">\n".$config_js."\n</script>", true);
+						$this->dynContent.=($this->dynStart)?"<script type=\"text/javascript\">\n".$config_js."\n</script>":"";
 					}
 
 					if ($js = trim($this->config['frontend_js'])) {
 						if (preg_match('/\.js/i', $js)) {
-							$this->modx->regClientScript(preg_replace(array('/^\n/', '/\t{7}/'), '', '
+							$temp=preg_replace(array('/^\n/', '/\t{7}/'), '', '
 								<script type="text/javascript">
 									if(typeof jQuery == "undefined") {
 										document.write("<script src=\"'.$this->config['assetsUrl'].'js/lib/jquery.min.js\" type=\"text/javascript\"><\/script>");
 									}
 								</script>
-							'), true);
+							');
+							$this->modx->regClientScript($temp, true);
 							$this->modx->regClientScript(str_replace('[[+assetsUrl]]', $this->config['assetsUrl'], $js));
+							$this->dynContent.=($this->dynStart)?"<script type=\"text/javascript\" src='".str_replace('[[+assetsUrl]]', $this->config['assetsUrl'], $js)."'></script>":"";
 						}
 					}
 				}
