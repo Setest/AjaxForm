@@ -7,9 +7,9 @@ class AjaxForm {
 	public $config;
 	/** @var array $initialized */
 	public $initialized = array();
-	/** @var string [ñîäåðæèò css è script äëÿ âîçâðàòà â ñëó÷àå åñëè ñíèïïåò çàïóñêàåòñÿ èç ajax ] */
+	/** @var string [ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ñ‚ css Ð¸ script Ð´Ð»Ñ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‚Ð° Ð² ÑÐ»ÑƒÑ‡Ð°Ðµ ÐµÑÐ»Ð¸ ÑÐ½Ð¸Ð¿Ð¿ÐµÑ‚ Ð·Ð°Ð¿ÑƒÑÐºÐ°ÐµÑ‚ÑÑ Ð¸Ð· ajax ] */
 	public $dynContent = "";
-	/** @var boolean [ïðè true ïîäãðóæàåò js è css â ÷àíê] */
+	/** @var boolean [Ð¿Ñ€Ð¸ true Ð¿Ð¾Ð´Ð³Ñ€ÑƒÐ¶Ð°ÐµÑ‚ js Ð¸ css Ð² Ñ‡Ð°Ð½Ðº] */
 	public $dynStart = false;
 
 	/**
@@ -24,8 +24,8 @@ class AjaxForm {
 		$assetsUrl = $this->modx->getOption('ajaxform_assets_url', $config, $this->modx->getOption('assets_url') . 'components/ajaxform/');
 
 		// SETEST
-		// ýòî ñâîéñòâî äëÿ ïîäêëþ÷åíèÿ ñòèëåé è ñêðèïòîâ íå âî âíåøíèé output à â ÷àíê
-		// íà ñëó÷àé åñëè ñàéò ïîëíîñòüþ íà ajax
+		// ÑÑ‚Ð¾ ÑÐ²Ð¾Ð¹ÑÑ‚Ð²Ð¾ Ð´Ð»Ñ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ ÑÑ‚Ð¸Ð»ÐµÐ¹ Ð¸ ÑÐºÑ€Ð¸Ð¿Ñ‚Ð¾Ð² Ð½Ðµ Ð²Ð¾ Ð²Ð½ÐµÑˆÐ½Ð¸Ð¹ output Ð° Ð² Ñ‡Ð°Ð½Ðº
+		// Ð½Ð° ÑÐ»ÑƒÑ‡Ð°Ð¹ ÐµÑÐ»Ð¸ ÑÐ°Ð¹Ñ‚ Ð¿Ð¾Ð»Ð½Ð¾ÑÑ‚ÑŒÑŽ Ð½Ð° ajax
 		$this->dynStart = $modx->getOption('dynStart', $config, false);
 
 		$this->modx->lexicon->load('ajaxform:default');
